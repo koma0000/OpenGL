@@ -8,7 +8,7 @@
 #include <GLFW/glfw3.h>
 #include <random>
 
-static const GLsizei WIDTH = 1080, HEIGHT = 720; //размеры окна
+static const GLsizei WIDTH = 1366, HEIGHT = 768; //размеры окна
 static int filling = 0;
 static bool keys[1024]; //массив состояний кнопок - нажата/не нажата
 static GLfloat lastX = 400, lastY = 300; //исходное положение мыши
@@ -21,7 +21,7 @@ static int g_shaderProgram = 0;
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
-Camera camera(float3(0.0f, 0.0f, 5.0f));
+Camera camera(float3(60.0f, 100.0f, 40.0f));
 
 //функция для обработки нажатий на кнопки клавиатуры
 void OnKeyboardPressed(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -584,24 +584,9 @@ int main(int argc, char** argv)
     float radius = 1.0f;
     GLsizei sphereIndices = CreateSphere(radius, 50, vaoSphere);
 
-    GLuint vaoSun;
-    GLsizei sunIndices = CreateSphere(7.0f, 50, vaoSun);
-    GLuint vaoMerkur;
-    GLsizei merkurIndices = CreateSphere(0.024f, 50, vaoMerkur);
-    GLuint vaoVenera;
-    GLsizei veneraIndices = CreateSphere(0.06f, 50, vaoVenera);
-    GLuint vaoEarth;
-    GLsizei earthIndices = CreateSphere(0.063f, 50, vaoEarth);
-    GLuint vaoMars;
-    GLsizei marsIndices = CreateSphere(0.034f, 50, vaoMars);
-    GLuint vaoJupyter;
-    GLsizei jupyterIndices = CreateSphere(0.7f, 50, vaoJupyter);
-    GLuint vaoSaturn;
-    GLsizei saturnIndices = CreateSphere(0.6f, 50, vaoSaturn);
-    GLuint vaoUran;
-    GLsizei uranIndices = CreateSphere(0.253f, 50, vaoUran);
-    GLuint vaoNeptun;
-    GLsizei neptunIndices = CreateSphere(0.246f, 50, vaoNeptun);
+  /*  GLuint vaoSun;
+    GLsizei sunIndices = CreateSphere(7.0f, 50, vaoSun)*/;
+   
 
     GLuint vaoPlane;
     GLsizei squarePlaneIndices = CreatePlane(vaoPlane);
@@ -611,6 +596,12 @@ int main(int argc, char** argv)
     GLsizei cylinderIndices = CreateCylinder(vaoCylinder, float4(0.0f, 0.0f, 0.0f, 1.0f), 30, 1.0f);
     GLuint vaoParallel;
     GLsizei parallelIndices = CreateParallel(vaoParallel);
+
+    GLuint samolet;
+    GLsizei samolet__ = CreateSphere(0.246f, 50, samolet);
+
+    GLuint sm;
+    GLsizei sm__ = CreateSphere(0.246f, 50, samolet);
     glViewport(0, 0, WIDTH, HEIGHT);  GL_CHECK_ERRORS;
     glEnable(GL_DEPTH_TEST);  GL_CHECK_ERRORS;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -639,6 +630,59 @@ int main(int argc, char** argv)
         lambert.SetUniform("view", view);       GL_CHECK_ERRORS;
         lambert.SetUniform("projection", projection); GL_CHECK_ERRORS;
 
+
+
+        glBindVertexArray(samolet);
+        {
+            float4x4 model;
+            model = transpose(mul(rotate_X_4x4(timer),mul(translate4x4(float3(2.0f+sin(timer), 95.0f+cos(timer/2), 2.0f)), scale4x4(float3(5*1.0f,5* 1.0f, 5*5.0f)))));
+            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
+            glDrawElements(GL_TRIANGLE_STRIP, samolet__, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
+
+
+
+            model = transpose(mul(rotate_X_4x4(timer),(mul(translate4x4(float3(3.0f + sin(timer), 95.0f + cos(timer/2), 2.0f)), scale4x4(float3(5*4.0f,5* 0.5f, 5*1.0f))))));
+            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
+            glDrawElements(GL_TRIANGLE_STRIP, samolet__, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
+
+
+
+            model = transpose(mul(rotate_X_4x4(timer),(mul(translate4x4(float3(1.0f + sin(timer), 95.0f + cos(timer/2), 2.0f)), scale4x4(float3(5*4.0f, 5*0.5f, 5*1.0f))))));
+            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
+            glDrawElements(GL_TRIANGLE_STRIP, samolet__, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
+
+
+
+             
+        }
+
+
+
+
+
+        /*glBindVertexArray(sm);
+        {
+            float4x4 model;
+            model = transpose(mul(rotate_Y_4x4(timer), mul(translate4x4(float3(10.0f + sin(timer), 0.0, 2.0f)), scale4x4(float3(1.0f, 1.0f, 5.0f)))));
+            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
+            glDrawElements(GL_TRIANGLE_STRIP, sm__, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
+
+
+
+            model = transpose(mul(rotate_Y_4x4(timer), (mul(translate4x4(float3(10.0f + sin(timer), 0.0f, 3.0f)), scale4x4(float3(4.0f, 0.5f, 1.0f))))));
+            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
+            glDrawElements(GL_TRIANGLE_STRIP, sm__, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
+
+
+
+            model = transpose(mul(rotate_Y_4x4(timer), (mul(translate4x4(float3(10.0f + sin(timer), 0.0f, 1.0f)), scale4x4(float3(4.0f, 0.5f, 1.0f))))));
+            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
+            glDrawElements(GL_TRIANGLE_STRIP, sm__, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
+
+
+
+
+        }*/
         glBindVertexArray(vaoSphere);
         {
             float4x4 model;
@@ -701,70 +745,15 @@ int main(int argc, char** argv)
             glDrawElements(GL_TRIANGLE_STRIP, parallelIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
         }
         glBindVertexArray(0); GL_CHECK_ERRORS
-            glBindVertexArray(vaoSun);
+     /*       glBindVertexArray(vaoSun);
         {
             float4x4 model;
             model = transpose(translate4x4(float3(0.0f, +20.0f, 15.0f)));
             lambert.SetUniform("model", model); GL_CHECK_ERRORS;
             glDrawElements(GL_TRIANGLE_STRIP, sunIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        glBindVertexArray(vaoMerkur);
-        {
-            float4x4 model;
-            model = transpose(mul(rotate_Y_4x4(timer * 4.79f * LiteMath::DEG_TO_RAD), translate4x4(float3(9.0f, +20.0f, 15.0f))));
-            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
-            glDrawElements(GL_TRIANGLE_STRIP, merkurIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        glBindVertexArray(vaoVenera);
-        {
-            float4x4 model;
-            model = transpose(mul(rotate_Y_4x4(timer * 3.5f * LiteMath::DEG_TO_RAD), translate4x4(float3(9.5f, +20.0f, 15.0f))));
-            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
-            glDrawElements(GL_TRIANGLE_STRIP, veneraIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        glBindVertexArray(vaoEarth);
-        {
-            float4x4 model;
-            model = transpose(mul(rotate_Y_4x4(timer * 2.9f * LiteMath::DEG_TO_RAD), translate4x4(float3(10.0f, +20.0f, 15.0f))));
-            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
-            glDrawElements(GL_TRIANGLE_STRIP, earthIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        glBindVertexArray(vaoMars);
-        {
-            float4x4 model;
-            model = transpose(mul(rotate_Y_4x4(timer * 2.4f * LiteMath::DEG_TO_RAD), translate4x4(float3(11.5f, +20.0f, 15.0f))));
-            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
-            glDrawElements(GL_TRIANGLE_STRIP, marsIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        glBindVertexArray(vaoJupyter);
-        {
-            float4x4 model;
-            model = transpose(mul(rotate_Y_4x4(timer * 1.3f * LiteMath::DEG_TO_RAD), translate4x4(float3(12.5f, +20.0f, 15.0f))));
-            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
-            glDrawElements(GL_TRIANGLE_STRIP, jupyterIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        glBindVertexArray(vaoSaturn);
-        {
-            float4x4 model;
-            model = transpose(mul(rotate_Y_4x4(timer * 9.7f * LiteMath::DEG_TO_RAD), translate4x4(float3(15.0f, +20.0f, 15.0f))));
-            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
-            glDrawElements(GL_TRIANGLE_STRIP, saturnIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        glBindVertexArray(vaoUran);
-        {
-            float4x4 model;
-            model = transpose(mul(rotate_Y_4x4(timer * 6.84f * LiteMath::DEG_TO_RAD), translate4x4(float3(17.0f, +20.0f, 15.0f))));
-            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
-            glDrawElements(GL_TRIANGLE_STRIP, uranIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        glBindVertexArray(vaoNeptun);
-        {
-            float4x4 model;
-            model = transpose(mul(rotate_Y_4x4(timer * 5.5f * LiteMath::DEG_TO_RAD), translate4x4(float3(19.0f, +20.0f, 15.0f))));
-            lambert.SetUniform("model", model); GL_CHECK_ERRORS;
-            glDrawElements(GL_TRIANGLE_STRIP, neptunIndices, GL_UNSIGNED_INT, nullptr); GL_CHECK_ERRORS;
-        }
-        timer += 0.1f;
+        }*/
+      
+        timer += 0.005f/2;
         glBindVertexArray(0); GL_CHECK_ERRORS;
         lambert.StopUseShader(); GL_CHECK_ERRORS;
         glfwSwapBuffers(window);
@@ -776,15 +765,9 @@ int main(int argc, char** argv)
     glDeleteVertexArrays(1, &vaoCylinder);
     glDeleteVertexArrays(1, &vaoParallel);
     //
-    glDeleteVertexArrays(1, &vaoSun);
-    glDeleteVertexArrays(1, &vaoMerkur);
-    glDeleteVertexArrays(1, &vaoVenera);
-    glDeleteVertexArrays(1, &vaoEarth);
-    glDeleteVertexArrays(1, &vaoMars);
-    glDeleteVertexArrays(1, &vaoJupyter);
-    glDeleteVertexArrays(1, &vaoSaturn);
-    glDeleteVertexArrays(1, &vaoUran);
-    glDeleteVertexArrays(1, &vaoNeptun);
+   /* glDeleteVertexArrays(1, &vaoSun);*/
+   /* glDeleteVertexArrays(1, &samolet);*/
+
     glfwTerminate();
     return 0;
 }
